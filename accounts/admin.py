@@ -5,8 +5,6 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 # Register your models here.
 from .models import BlogUser
-from django.utils.translation import gettext, gettext_lazy as _
-from django.contrib.auth.forms import UsernameField
 
 
 class BlogUserCreationForm(forms.ModelForm):
@@ -30,34 +28,28 @@ class BlogUserCreationForm(forms.ModelForm):
         user = super().save(commit=False)
         user.set_password(self.cleaned_data["password1"])
         if commit:
-            user.source = 'adminsite'
             user.save()
         return user
 
 
-class BlogUserChangeForm(UserChangeForm):
-    password = ReadOnlyPasswordHashField(
-        label=_("Password"),
-        help_text=_(
-            "Raw passwords are not stored, so there is no way to see this "
-            "user's password, but you can change the password using "
-            "<a href=\"{}\">this form</a>."
-        ),
-    )
+class BlogUserChangeForm(forms.ModelForm):
+    password = ReadOnlyPasswordHashField
     email = forms.EmailField(label="Email", widget=forms.EmailInput)
 
     class Meta:
         model = BlogUser
-        fields = '__all__'
-        field_classes = {'username': UsernameField}
+        fields = ('email', 'password', 'is_active')
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def clean_password(self):
+        # Regardless of what the user provides, return the initial value.
+        # This is done here, rather than on the field, because the
+        # field does not have access to the initial value
+        return self.initial["password"]
 
 
 class BlogUserAdmin(UserAdmin):
     form = BlogUserChangeForm
     add_form = BlogUserCreationForm
-    list_display = ('id', 'nickname', 'username', 'email', 'last_login', 'date_joined', 'source')
+    list_display = ('id', 'nickname', 'username', 'email', 'last_login', 'date_joined')
     list_display_links = ('id', 'username')
     ordering = ('-id',)

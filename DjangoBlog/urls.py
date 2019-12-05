@@ -23,6 +23,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from DjangoBlog.admin_site import admin_site
 from django.urls import include, path
+from django.views.generic.base import RedirectView
 
 sitemaps = {
 
@@ -49,7 +50,8 @@ urlpatterns = [
                   url(r'^rss/$', DjangoBlogFeed()),
                   url(r'^search', include('haystack.urls'), name='search'),
                   url(r'', include('servermanager.urls', namespace='servermanager')),
-                  url(r'', include('owntracks.urls', namespace='owntracks'))
+                  url(r'', include('owntracks.urls', namespace='owntracks')),
+                  url(r'^favicon.ico$', RedirectView.as_view(url=r'static/favicon.ico'))
               ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
