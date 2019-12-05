@@ -100,8 +100,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'djangoblog',
         'USER': 'root',  # os.environ.get('DJANGO_MYSQL_USER')
-        'PASSWORD': os.environ.get('DJANGO_MYSQL_PASSWORD'),  # os.environ.get('DJANGO_MYSQL_PASSWORD')
-        'HOST':  os.environ.get('DJANGO_MYSQL_PASSWORD'),  # os.environ.get('DJANGO_MYSQL_HOST')
+        'PASSWORD': '47.101.193.8',  # os.environ.get('DJANGO_MYSQL_PASSWORD')
+        'HOST':'47.101.193.8', # os.environ.get('DJANGO_MYSQL_HOST')
         'PORT': 3306,
         'OPTIONS': {'charset': 'utf8mb4'},
     }
